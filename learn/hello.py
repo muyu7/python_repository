@@ -1,6 +1,4 @@
-#print('hello,world')
-print('''123
-456
-789''')
-print(r'''hello,\n
-world''')
+s1=72
+s2=85
+r=(85-72)/72
+print(f"小明去年成绩为{s1},今年成绩为{s2},提高了{(r*100):.2f}%")
