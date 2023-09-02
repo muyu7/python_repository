@@ -1,4 +1,8 @@
-s1=72
-s2=85
-r=(85-72)/72
-print(f"小明去年成绩为{s1},今年成绩为{s2},提高了{(r*100):.2f}%")
+closes=[1,2,3,4,5,6,7,8,9,0]
+means=[]
+for i in range(len(closes)-4):
+    close=closes[i:i+5]
+    print('i:',i,"+close:",close,"+close_len:",len(close))
+    mean=sum(close)/len(close)
+    means.append(mean)
+print(means)
