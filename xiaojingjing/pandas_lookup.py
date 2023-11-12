@@ -6,6 +6,7 @@
 """
 # df.loc 查询数据的five种方法
     #首先数据预处理：设定行列标签，数据格式和数字化
+"""
 #fpath2 = "D:/python\MyPython-学习过程与code/origin_data/deal_with_data.xlsx"
 fpath2= "./deal_with_data.xlsx"
 import pandas as pd
@@ -30,3 +31,23 @@ print(df.head(3))
 
 #4 使用条件表达式查询
 #5 调用函数查询
+"""
+import pandas as pd
+from openpyxl import load_workbook
+
+# 读取 Excel 文件
+excel_file = './晨会_副本.xlsx'
+
+# 从 Sheet1 读取数据到 Pandas DataFrame
+df = pd.read_excel(excel_file, sheet_name='原始数据-不要动 -数字化')
+
+# 提取商品名、等级和年份作为透视表的索引和列
+pivot_table = pd.pivot_table(df, index=['商品名', '等级'], columns='年份', values=['列名1', '列名2', ...], aggfunc='mean')
+
+# 打开 Excel 文件并将透视表写入到 Sheet2
+with pd.ExcelWriter(excel_file, engine='openpyxl', mode='a') as writer:
+    writer.book = load_workbook(excel_file)
+    pivot_table.to_excel(writer, sheet_name='Sheet2')
+    writer.save()
+
+
