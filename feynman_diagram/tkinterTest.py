@@ -1,5 +1,8 @@
 from tkinter import *
 from tkinter import ttk
+from uiController import UIController
+from feynmanElements import FeynmanElements
+from globalVaribles import GlobalVariables
 
 
 # 输出日志
@@ -56,45 +59,41 @@ def getCurrentItem(event,canvas):
     # for widget in currentItems:
     #     if()
 # 创建canvas背景
-def creatbackground(canvas):
-    x=0
-    canvasWidth=canvas.winfo_width()
-    canvasHeight=canvas.winfo_height()
-    gap=20
-    while x*gap < canvasWidth:
-        canvas.create_line(x*gap,0,x*gap,canvasHeight,fill='red')
-        x=x+1
-    y=0
-    while y*gap < canvasWidth:
-        canvas.create_line(0,y*gap,canvasWidth,y*gap,fill='red')
-        y=y+1
-# 创建工具栏
-def creatMainBoard(root,canvas):
-    # 生成顶部工具栏
-    topFrm=Frame(root,height=50)
-    topFrm.grid(column=0,row=0)
-    ttk.Label(topFrm,text='Hello').grid(column=0,row=0)
-    # 生成左边菜单栏
-    leftFrm=ttk.Frame(root,width=50)
-    leftFrm.grid(column=0,row=1)
-    ttk.Button(leftFrm,text='drawLine',command=difineGlobalVarities()).grid(column=0,row=0)
+# def creatbackground(canvas):
+#     x=0
+#     canvasWidth=canvas.winfo_width()
+#     canvasHeight=canvas.winfo_height()
+#     global gap = 20
+#     while x*gap < canvasWidth:
+#         canvas.create_line(x*gap,0,x*gap,canvasHeight,fill='red')
+#         x=x+1
+#     y=0
+#     while y*gap < canvasWidth:
+#         canvas.create_line(0,y*gap,canvasWidth,y*gap,fill='red')
+#         y=y+1
+# # 创建工具栏
+# def creatMainBoard(root,canvas):
+#     # 生成顶部工具栏
+#     topFrm=Frame(root,height=50)
+#     topFrm.grid(column=0,row=0)
+#     ttk.Label(topFrm,text='Hello').grid(column=0,row=0)
+#     # 生成左边菜单栏
+#     leftFrm=ttk.Frame(root,width=50)
+#     leftFrm.grid(column=0,row=1)
+#     ttk.Button(leftFrm,text='drawLine',command=difineGlobalVarities()).grid(column=0,row=0)
     
         
 root = Tk()
 canvas = Canvas(root,width=800,height=800,background='white')
-canvas.focus()
 canvas.grid(column=1,row=1)
-canvas.update()
-difineGlobalVarities()
-creatMainBoard(root,canvas)
-creatbackground(canvas)
-bindEventToCanvas()
-# line=drawLine(canvas)
-# line.grid(column=0,row=0)
-# frm = ttk.Frame(root,padding=(50,10,100,30))
-# frm.grid(column=0,row=0)
-# ttk.Label(frm, text="Hello World!").grid(column=0, row=0)
-# ttk.Button(frm, text="draw it", command=root.destroy).grid(column=1, row=0)
+
+gloVar = GlobalVariables()
+gloVar.set_root(root)
+gloVar.set_canvas(canvas)
+
+ui_controller = UIController()
+ui_controller.create_ui()
+
 root.mainloop()
 
 # 找到点击的对象
