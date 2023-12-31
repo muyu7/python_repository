@@ -1,6 +1,7 @@
 import tkinter as tk
 import math
 import numpy as np
+from globalVaribles import GlobalVariables
 
 class FeynmanElements:
     class ElementStyle:
@@ -20,14 +21,16 @@ class FeynmanElements:
         self.end_x =-1
         self.end_y =-1
     def setPoints(self,start_x, start_y, end_x, end_y):
-        if start_x != -1:
-            self.start_x = start_x
-        if start_y != -1:
-            self.start_y = start_y
-        if end_x != -1:
-            self.end_x = end_x
-        if end_y != -1:
-            self.end_y = end_y
+        start_point = self.get_vaild_point(start_x,start_y)
+        end_point = self.get_vaild_point(end_x, end_y)
+        if start_point[0] != -1:
+            self.start_x = start_point[0]
+        if start_point[1] != -1:
+            self.start_y = start_point[1]
+        if end_point[0] != -1:
+            self.end_x = end_point[0]
+        if end_point[1] != -1:
+            self.end_y = end_point[1]
 
     def reset_style(self):
         self.elementStyle = self.ElementStyle.NONE
@@ -37,9 +40,6 @@ class FeynmanElements:
             raise ValueError("Invalid style. Must be an ElementStyle.")
         self.elementStyle = style
     def draw_wavy_line(self, canvas, start_x, start_y, end_x, end_y):
-        # if amplitude <= 0 or wavelength <= 0:
-        #     raise ValueError("Amplitude and wavelength must be positive")
-        
         # Check for horizontal line
         if start_y == end_y:
             end_x_rotation = end_x
@@ -102,5 +102,15 @@ class FeynmanElements:
                 return self.draw_straight_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
             case _:
                 return
-        
+    def get_vaild_point(self, x, y):
+        if x == -1 or y == -1:
+            return [x,y]
+        glovars = GlobalVariables()
+        gap = glovars.get_gap()
+        canvas = glovars.get_canvas()
+        max_x = round(canvas.winfo_width() / gap)
+        max_y = round(canvas.winfo_height() / gap)
+        num_x = min(round(x / gap),max_x)
+        num_y = min(round(y / gap),max_y)
+        return [num_x*gap,num_y*gap]  
 

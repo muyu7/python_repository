@@ -5,7 +5,6 @@ from feynmanElements import FeynmanElements
 from globalVaribles import GlobalVariables
 class UIController:
     def __init__(self) -> None:
-        self.gap = 20  # 背景板线条的间距
         self.event = EventFuntions()
     def createBackground(self):
         glovars = GlobalVariables()
@@ -16,7 +15,7 @@ class UIController:
 
         canvasWidth=canvas.winfo_width()
         canvasHeight=canvas.winfo_height()
-        gap = self.gap
+        gap = glovars.get_gap()
 
         # Draw vertical lines
         x=0
@@ -59,3 +58,5 @@ class UIController:
         canvas.bind('<ButtonPress-1>',lambda event:self.event.OnCanvasPress(event))
         canvas.bind('<B1-Motion>',lambda event:self.event.OnMouseMoving(event))
         canvas.bind('<ButtonRelease-1>',lambda event:self.event.OnCanvasRelease(event))
+
+    
