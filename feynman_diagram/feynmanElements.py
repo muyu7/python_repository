@@ -108,8 +108,8 @@ class FeynmanElements:
         glovars = GlobalVariables()
         gap = glovars.get_gap()
         canvas = glovars.get_canvas()
-        max_x = round(canvas.winfo_width() / gap)
-        max_y = round(canvas.winfo_height() / gap)
+        max_x = math.floor(canvas.winfo_width() / gap)
+        max_y = math.floor(canvas.winfo_height() / gap)
         num_x = min(round(x / gap),max_x)
         num_y = min(round(y / gap),max_y)
         return [num_x*gap,num_y*gap]  
