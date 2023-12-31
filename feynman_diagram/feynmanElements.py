@@ -54,7 +54,8 @@ class FeynmanElements:
 
         if length == 0:  # Check for very short lines
             return
-
+        half_wave_num = round (2 * length / self.wavelength)
+        local_wavelength = length /(half_wave_num*2)
         # Calculate the horizontal distance between points (step size)
         step_size = length / self.steps
 
@@ -65,7 +66,8 @@ class FeynmanElements:
             # Calculate the x coordinate
             x = start_x + i * step_size
             # Calculate the y coordinate using a sinusoidal function
-            y = start_y + self.amplitude * math.sin(2 * math.pi * i / self.wavelength)
+            y = start_y + self.amplitude * math.sin(2 * math.pi * i*step_size / local_wavelength)
+            # print('x:',x,'y',y)
             # 旋转到需要的位置
             rotatePoint = rotationMatrix.dot([x-start_x,y-start_y]) + [start_x,start_y]
 
