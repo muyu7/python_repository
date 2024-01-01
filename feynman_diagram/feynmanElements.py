@@ -20,21 +20,38 @@ class FeynmanElements:
         self.start_y =-1
         self.end_x =-1
         self.end_y =-1
-    def setPoints(self,start_x, start_y, end_x, end_y):
+        self.is_line_changed = False
+
+        self.old_line=None
+    def set_start_points(self,start_x, start_y):
+        
         start_point = self.get_vaild_point(start_x,start_y)
-        end_point = self.get_vaild_point(end_x, end_y)
+        print('points2:',self.start_x,start_point[0],self.start_y,start_point[1])
+        if self.start_x == start_point[0] and self.start_y == start_point[1]:
+            self.is_line_changed = False
+            return
+        else:
+            self.is_line_changed = True
         if start_point[0] != -1:
             self.start_x = start_point[0]
         if start_point[1] != -1:
             self.start_y = start_point[1]
+    def set_end_point(self,end_x,end_y):
+        end_point = self.get_vaild_point(end_x, end_y)
+        if self.end_x == end_point[0] and self.end_y == end_point[1]:
+            self.is_line_changed = False
+            return
+        else:
+            self.is_line_changed = True
+        
         if end_point[0] != -1:
             self.end_x = end_point[0]
         if end_point[1] != -1:
             self.end_y = end_point[1]
-
     def reset_style(self):
         self.elementStyle = self.ElementStyle.NONE
-
+    def reset_old_line(self):
+        self.old_line = None
     def setElementStyle(self, style:ElementStyle):
         if style not in (self.ElementStyle.PHOTON, self.ElementStyle.STRAIGHT):
             raise ValueError("Invalid style. Must be an ElementStyle.")
@@ -95,13 +112,20 @@ class FeynmanElements:
     def draw_feynman_element(self, canvas):
         if self.elementStyle == FeynmanElements.ElementStyle.NONE:
             return
+        if not self.is_line_changed :
+            return
+        print('point changed',self.is_line_changed)
         if self.start_x == -1 or self.start_y == -1 or self.end_x == -1 or self.end_y == -1:
             return
+        
+        if self.old_line != None:
+            canvas.delete(self.old_line)
+
         match self.elementStyle:
             case self.ElementStyle.PHOTON:
-                return self.draw_wavy_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
+                self.old_line = self.draw_wavy_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
             case self.ElementStyle.STRAIGHT:
-                return self.draw_straight_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
+                self.old_line = self.draw_straight_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
             case _:
                 return
     def get_vaild_point(self, x, y):
