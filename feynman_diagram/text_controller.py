@@ -6,6 +6,8 @@ from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
 from io import BytesIO
 
+import os
+
 class TextController:
     def render_latex_to_image(self, formula, fontsize=12, dpi=200, padding=0.1):
         """
@@ -48,6 +50,7 @@ class TextController:
         return image
     def update_button_image(self, button):
         """Update the image on the button."""
+        print('try to update the button')
         formula = askstring("Input LaTeX Formula", "Enter your LaTeX formula:")
         if not formula:
             print("No formula entered.")
@@ -61,18 +64,25 @@ class TextController:
         else:
             print("Failed to render formula.")
 
-# Create the main window
-root = tk.Tk()
-root.title("LaTeX in Tkinter")
+# #Create the main window
+# root = tk.Tk()
+# root.title("LaTeX in Tkinter")
+# canvas = tk.Canvas(root,width=800,height=800,background='white')
+# canvas.grid(column=1,row=1)
 
-# Create a default image for the button
-default_image = Image.new('RGB', (100, 30), color = (255, 255, 255))  # White image
-default_photo = ImageTk.PhotoImage(default_image)
 
-# Button to update the image
-tex_controller = TextController()
-button = tk.Button(root, image=default_photo, command=lambda: tex_controller.update_button_image(button))
-button.grid(column=0, row=0)
+# print("Current Working Directory:", os.getcwd())
 
-# Start the GUI event loop
-root.mainloop()
+# # Create a default image for the button
+# default_image_path = './feynman_diagram/resources/default_tex.png'
+# default_image = Image.open(default_image_path)
+# # default_image = Image.new('RGB', (100, 30), color = (255, 255, 255))  # White image
+# default_photo = ImageTk.PhotoImage(default_image)
+
+# # Button to update the image
+# tex_controller = TextController()
+# button = tk.Button(canvas, image=default_photo, command=lambda: tex_controller.update_button_image(button))
+# button.grid(column=0, row=0)
+
+# # Start the GUI event loop
+# root.mainloop()

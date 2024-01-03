@@ -2,12 +2,17 @@ import tkinter as tk
 import math
 import numpy as np
 from globalVaribles import GlobalVariables
+from PIL import Image, ImageTk
+from text_controller import TextController
+# for test
+import os
 
 class FeynmanElements:
     class ElementStyle:
         NONE = 'none'
         PHOTON = 'photon'
         STRAIGHT = 'straight'
+        LATEX = 'latex'
     def __init__(self) -> None:
         self.elementStyle = self.ElementStyle.NONE
 
@@ -24,9 +29,10 @@ class FeynmanElements:
 
         self.old_line=None
     def set_start_points(self,start_x, start_y):
-        
-        start_point = self.get_vaild_point(start_x,start_y)
-        print('points2:',self.start_x,start_point[0],self.start_y,start_point[1])
+        if self.elementStyle != self.ElementStyle.LATEX:
+            start_point = self.get_vaild_point(start_x,start_y)
+        else:
+            start_point = [start_x, start_y]
         if self.start_x == start_point[0] and self.start_y == start_point[1]:
             self.is_line_changed = False
             return
@@ -37,6 +43,10 @@ class FeynmanElements:
         if start_point[1] != -1:
             self.start_y = start_point[1]
     def set_end_point(self,end_x,end_y):
+        if self.elementStyle != self.ElementStyle.LATEX:
+            end_point = self.get_vaild_point(end_x, end_y)
+        else:
+            end_point = [end_x, end_y]
         end_point = self.get_vaild_point(end_x, end_y)
         if self.end_x == end_point[0] and self.end_y == end_point[1]:
             self.is_line_changed = False
@@ -53,8 +63,8 @@ class FeynmanElements:
     def reset_old_line(self):
         self.old_line = None
     def setElementStyle(self, style:ElementStyle):
-        if style not in (self.ElementStyle.PHOTON, self.ElementStyle.STRAIGHT):
-            raise ValueError("Invalid style. Must be an ElementStyle.")
+        # if style not in (self.ElementStyle.PHOTON, self.ElementStyle.STRAIGHT):
+        #     raise ValueError("Invalid style. Must be an ElementStyle.")
         self.elementStyle = style
     def draw_wavy_line(self, canvas, start_x, start_y, end_x, end_y):
         # Check for horizontal line
@@ -109,25 +119,15 @@ class FeynmanElements:
             return canvas.create_line(start_x, start_y, end_x, end_y, smooth=True, width=self.lineWidth)
     def calculate_distance(self, x1, y1, x2, y2):
         return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-    def draw_feynman_element(self, canvas):
-        if self.elementStyle == FeynmanElements.ElementStyle.NONE:
-            return
-        if not self.is_line_changed :
-            return
-        print('point changed',self.is_line_changed)
-        if self.start_x == -1 or self.start_y == -1 or self.end_x == -1 or self.end_y == -1:
-            return
-        
-        if self.old_line != None:
-            canvas.delete(self.old_line)
-
-        match self.elementStyle:
-            case self.ElementStyle.PHOTON:
-                self.old_line = self.draw_wavy_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
-            case self.ElementStyle.STRAIGHT:
-                self.old_line = self.draw_straight_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
-            case _:
-                return
+    def draw_latex_button(self, canvas, start_x, start_y):
+        print("Current Working Directory:", os.getcwd())
+        default_image_path = './feynman_diagram/resources/default_tex.png'
+        default_image = Image.open(default_image_path)
+        default_photo = ImageTk.PhotoImage(default_image)
+        tex_contr = TextController()
+        button = tk.Button(canvas, image=default_photo, command=lambda: tex_contr.update_button_image(button))
+        button.place(x=start_x,y=start_y)
+        button.grid(0,0)
     def get_vaild_point(self, x, y):
         if x == -1 or y == -1:
             return [x,y]
@@ -139,4 +139,31 @@ class FeynmanElements:
         num_x = min(round(x / gap),max_x)
         num_y = min(round(y / gap),max_y)
         return [num_x*gap,num_y*gap]  
+    
+    def is_line(self):
+        if self.elementStyle == FeynmanElements.ElementStyle.LATEX:
+            return False
+        else:
+            return True
+    def draw_feynman_element(self, canvas):
+        print('feyn style:',self.elementStyle)
+        if self.elementStyle == FeynmanElements.ElementStyle.NONE:
+            return
+        if self.start_x == -1 or self.start_y == -1 or self.end_x == -1 or self.end_y == -1:
+            return
+        if self.is_line():
+            if not self.is_line_changed :
+                return
+            if self.old_line != None:
+                canvas.delete(self.old_line)
+
+            match self.elementStyle:
+                case self.ElementStyle.PHOTON:
+                    self.old_line = self.draw_wavy_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
+                case self.ElementStyle.STRAIGHT:
+                    self.old_line = self.draw_straight_line(canvas, self.start_x, self.start_y, self.end_x, self.end_y)
+                case _:
+                    return
+        else:
+            self.draw_latex_button(canvas,self.start_x,self.start_y)
 
