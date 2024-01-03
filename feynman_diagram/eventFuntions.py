@@ -1,5 +1,6 @@
 from feynmanElements import FeynmanElements
 from globalVaribles import GlobalVariables
+from text_controller import TextController
 
 class EventFuntions:
     def __init__(self) -> None:
@@ -29,7 +30,6 @@ class EventFuntions:
         self.feyEle.reset_old_line()
         self.feyEle.set_end_point(event.x,event.y)
         self.feyEle.draw_feynman_element(glovars.get_canvas())
-
     def reset_style(self):
         self.feyEle.reset_style()
     

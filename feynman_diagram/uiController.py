@@ -45,7 +45,9 @@ class UIController:
         ttk.Button(leftFrm,text='draw straight line',command= lambda : self.event.OnStyleButtonClick(FeynmanElements.ElementStyle.STRAIGHT)).grid(column=0,row=0)
         # straigth_line_button.bind('<Button1>',)
         ttk.Button(leftFrm,text='draw wavy line',command= lambda : self.event.OnStyleButtonClick(FeynmanElements.ElementStyle.PHOTON)).grid(column=0,row=1)
-        
+        # create latex button
+        ttk.Button(leftFrm,text='Latex',command= lambda : self.event.OnStyleButtonClick(FeynmanElements.ElementStyle.LATEX)).grid(column=0,row=2)
+      
     def create_ui(self):
         self.createBackground()
         self.createMainBoard()
