@@ -24,7 +24,7 @@ class TextController:
         """
         # Initialize a matplotlib figure
         fig = plt.figure()
-        fig.patch.set_facecolor('white')
+        # fig.patch.set_facecolor('white')
         
         # Add text to the figure to estimate the size needed
         text = fig.text(0, 0, f'${formula}$', fontsize=fontsize, ha='left', va='bottom')
@@ -59,7 +59,7 @@ class TextController:
         image = self.render_latex_to_image(formula)
         if image:
             photo = ImageTk.PhotoImage(image)
-            button.config(image=photo)
+            button.config(image=photo,bg='white')
             button.image = photo  # Keep a reference!
         else:
             print("Failed to render formula.")

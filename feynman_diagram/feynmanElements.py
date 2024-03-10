@@ -120,14 +120,14 @@ class FeynmanElements:
     def calculate_distance(self, x1, y1, x2, y2):
         return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
     def draw_latex_button(self, canvas, start_x, start_y):
-        print("Current Working Directory:", os.getcwd())
         default_image_path = './feynman_diagram/resources/default_tex.png'
         default_image = Image.open(default_image_path)
         default_photo = ImageTk.PhotoImage(default_image)
         tex_contr = TextController()
-        button = tk.Button(canvas, image=default_photo, command=lambda: tex_contr.update_button_image(button))
+        button = tk.Button(canvas, image=default_photo, relief=tk.FLAT, borderwidth=0, command=lambda: tex_contr.update_button_image(button))
+        button.image = default_photo
         button.place(x=start_x,y=start_y)
-        button.grid(0,0)
+        # button.grid(column = 0, row = 0)
     def get_vaild_point(self, x, y):
         if x == -1 or y == -1:
             return [x,y]
@@ -146,7 +146,6 @@ class FeynmanElements:
         else:
             return True
     def draw_feynman_element(self, canvas):
-        print('feyn style:',self.elementStyle)
         if self.elementStyle == FeynmanElements.ElementStyle.NONE:
             return
         if self.start_x == -1 or self.start_y == -1 or self.end_x == -1 or self.end_y == -1:
